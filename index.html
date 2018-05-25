@@ -3,6 +3,7 @@
 <head>
     <title>Parking Permit Proposals</title>
 
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto">
     <link rel="stylesheet" type="text/css" href="main.css">
 
     <!-- <script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyCmSC9FYCsAMxhdtGABVsUcxPx2r7GsH-4"></script> -->
@@ -72,7 +73,7 @@
                 var reason;
                 if (users[i].legit === "No") reason = "None";
                 else reason = users[i].reason;
-                $('#user-data').append("<tr><td>" + users[i].last_name + ", " + users[i].first_name + "</td><td>" + users[i].email + "</td><td>" + users[i].address + "</td><td>" + Math.round(distances[i].elements[0].distance.value*0.000621371*100)/100 + "</td><td>" + reason + "</td></tr>");
+                $('#user-data').append("<tr><td class='name'>" + users[i].last_name + ", " + users[i].first_name + "</td><td class='email'>" + users[i].email + "</td><td class='address'>" + users[i].address + "</td><td class='distance'>" + Math.round(distances[i].elements[0].distance.value*0.000621371*100)/100 + "</td><td class='reason'>" + reason + "</td></tr>");
             }
         }
 
@@ -81,14 +82,14 @@
     </script>
 </head>
 <body>
-    <div id='container'>
-        <table id='user-data'>
+    <div id="container">
+        <table id="user-data">
             <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Address</th>
-                <th>Distance (mi)</th>
-                <th>Legitimate Reason</th>
+                <th class="name">Name</th>
+                <th class="email">Email</th>
+                <th class="address">Address</th>
+                <th class="distance">Distance (mi)</th>
+                <th class="reason">Legitimate Reason</th>
             </tr>
         </table>
     </div>
