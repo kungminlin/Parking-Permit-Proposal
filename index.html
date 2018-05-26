@@ -77,11 +77,29 @@
             }
         }
 
+        function initMap() {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: 37.3866556, lng: -122.1111336},
+                zoom: 13
+            });
+
+            var layer = new google.maps.FusionTablesLayer({
+                query: {
+                    select: '\'What is your street address?\'',
+                    from: TABLE_ID
+                }
+            });
+
+            layer.setMap(map);
+        }
+
         sync();
 
     </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCmSC9FYCsAMxhdtGABVsUcxPx2r7GsH-4&callback=initMap"></script>
 </head>
 <body>
+    <div id="map"></div>
     <div id="container">
         <table id="user-data">
             <tr>
