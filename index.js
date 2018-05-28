@@ -6,15 +6,11 @@ const url = require('url');
 
 const {app, BrowserWindow, Menu, ipcMain} = electron;
 
-let mainWindow;
-let addWindow;
+let mainWindow, mapWindow, selectionWindow;
 
-// Listen for app to be ready
 app.on('ready', function(){
-  // Create new window
   mainWindow = new BrowserWindow({});
   
-  // Load html in window
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, 'index.html'),
     protocol: 'file:',
@@ -23,42 +19,47 @@ app.on('ready', function(){
 
   mainWindow.maximize();
   
-  // Quit app when closed
   mainWindow.on('closed', function(){
     app.quit();
   });
 
-  // Build menu from template
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
-  // Insert menu
   Menu.setApplicationMenu(mainMenu);
 });
 
-// Handle add item window
-// function createAddWindow(){
-//   addWindow = new BrowserWindow({
-//     width: 300,
-//     height:200,
-//     title:'Add Shopping List Item'
-//   });
-//   addWindow.loadURL(url.format({
-//     pathname: path.join(__dirname, 'addWindow.html'),
-//     protocol: 'file:',
-//     slashes:true
-//   }));
-//   // Handle garbage collection
-//   addWindow.on('close', function(){
-//     addWindow = null;
-//   });
-// }
+function createMapWindow() {
+    mapWindow = new BrowserWindow({
+        width: 800,
+        height: 600,
+        title: 'Map'
+    });
+    //mapWindow.setMenu(null);
+    mapWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'map.html'),
+        protocol: 'file:',
+        slashes:true
+    }));
+    mapWindow.on('close', function() {
+        mapWindow = null;
+    })
+}
 
-// // Catch item:add
-// ipcMain.on('item:add', function(e, item){
-//   mainWindow.webContents.send('item:add', item);
-//   addWindow.close(); 
-//   // Still have a reference to addWindow in memory. Need to reclaim memory (Grabage collection)
-//   //addWindow = null;
-// });
+function createSelectionWindow() {
+    selectionWindow = new BrowserWindow({
+        width: 500,
+        height: 400,
+        title: 'Selection'
+    });
+
+    selectionWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'select.html'),
+        protocol: 'file:',
+        slashes:true
+    }));
+    selectionWindow.on('close', function() {
+        selectionWindow = null;
+    })
+}
 
 // Create menu template
 const mainMenuTemplate =  [
@@ -67,18 +68,6 @@ const mainMenuTemplate =  [
     label: 'File',
     submenu:[
       {
-        label:'Add Item',
-        click(){
-          createAddWindow();
-        }
-      },
-      {
-        label:'Clear Items',
-        click(){
-          mainWindow.webContents.send('item:clear');
-        }
-      },
-      {
         label: 'Quit',
         accelerator:process.platform == 'darwin' ? 'Command+Q' : 'Ctrl+Q',
         click(){
@@ -86,6 +75,49 @@ const mainMenuTemplate =  [
         }
       }
     ]
+  },
+  {
+      label: 'Window',
+      submenu: [
+          {
+              label: 'Map',
+              accelerator:process.platform == 'darwin' ? 'Command+M' : 'Ctrl+M',
+              click() {
+                  if (mapWindow != null) mapWindow.close();
+                  createMapWindow();
+              }
+          }
+      ]
+  },
+  {
+      label: 'Sort',
+      submenu: [
+          {
+              label: 'Sort by Eligibility',
+              click() {
+                  mainWindow.webContents.send('sort:eligibility');
+              }
+          },
+          {
+              label: 'Sort by Name',
+              click() {
+                  mainWindow.webContents.send('sort:name');
+              }
+          },
+          {
+              label: 'Clear Sorting Restrictions',
+              accelerator:process.platform == 'darwin' ? 'Command+Shift+C' : 'Ctrl+Shift+C',
+              click() {
+                  mainWindow.webContents.send('sort:clear');
+              }
+          }
+      ]
+  },
+  {
+      label: 'Select',
+      click() {
+        createSelectionWindow();
+      }
   }
 ];
 
