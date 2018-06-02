@@ -2,8 +2,7 @@ const {ipcRenderer} = require('electron');
 const {API_KEY, TABLE_ID, DESTINATION, mapsClient, updateEligibility} = require('./app');
 
 var users = [];
-var sortedEligibility = false;
-var sortedName = false;
+var sorted = {eligibility: false, name: false, seniority: false};
 
 function sync() {
     users = [];
@@ -78,9 +77,14 @@ ipcRenderer.on('sort:name', function() {
     sortByName();
 })
 
+ipcRenderer.on('sort:seniority', function() {
+    sortBySeniority();
+});
+
 ipcRenderer.on('sort:clear', function() {
-    sortedEligibility = false;
-    sortedName = false;
+    sorted.eligibility = false;
+    sorted.name = false;
+    sorted.seniority = false;
 })
 
 function sortByEligibility() {
@@ -88,13 +92,13 @@ function sortByEligibility() {
     table.find('tr').sort(function(a, b) {
         return ($(a).data('eligible') === $(b).data('eligible'))? 0: $(a).data('eligible')? -1: 1;
     }).appendTo(table);
-    sortedEligibility = true;
+    sorted.eligibility = true;
 }
 
 function sortByName() {
     var table = $('#user-data').find('tbody');
     var sortField;
-    if (sortedEligibility) {
+    if (sorted.eligibility) {
         sortName(table.find('tr[data-eligible=true]'));
         sortName(table.find('tr[data-eligible=false]'));
     }
@@ -107,7 +111,22 @@ function sortByName() {
         }).appendTo(table);
     }
     
-    sortedName = true;
+    sorted.name = true;
+}
+
+function sortBySeniority() {
+
+    // Temporary sorting mechanism based off of email assignment
+
+    var table = $('#user-data').find('tbody');
+    sortSeniority(table.find('tr'));
+    function sortSeniority(field) {
+        field.sort(function(a, b) {
+            return $(a).find('.email').text().localeCompare($(b).find('.email').text());
+        }).appendTo(table);
+    }
+
+    sorted.seniority = true;
 }
 
 sync();

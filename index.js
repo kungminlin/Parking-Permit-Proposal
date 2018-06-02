@@ -9,7 +9,7 @@ const {app, BrowserWindow, Menu, ipcMain} = electron;
 let mainWindow, mapWindow, selectionWindow;
 
 app.on('ready', function(){
-  mainWindow = new BrowserWindow({});
+  mainWindow = new BrowserWindow({'web-preferences': {'web-security': false}});
   
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, 'index.html'),
@@ -102,6 +102,12 @@ const mainMenuTemplate =  [
               label: 'Sort by Name',
               click() {
                   mainWindow.webContents.send('sort:name');
+              }
+          },
+          {
+              label: 'Sort by Seniority',
+              click() {
+                  mainWindow.webContents.send('sort:seniority');
               }
           },
           {
