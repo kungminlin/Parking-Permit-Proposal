@@ -1,23 +1,39 @@
 const {ipcRenderer} = require('electron');
+const fs = require('fs');
+
+var API_KEY, TABLE_ID;
 
 function initMap() {
 
-    const {boundary, TABLE_ID} = require('./app');
+  fs.readFile('params.txt', 'utf8', function(err, data) {
+    var params = data.split(',');
+    API_KEY = params[1];
+    TABLE_ID = params[0];
+    syncMap();
+  });
+}
 
-    var map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 37.3866556, lng: -122.1111336},
-        zoom: 13
-    });
+function syncMap() {
 
-    console.log(boundary);
-    boundary.setMap(map);
+  const {boundary} = require('./app');
 
-    var layer = new google.maps.FusionTablesLayer({
-        query: {
-            select: '\'What is your street address?\'',
-            from: TABLE_ID
-        }
-    });
+  var map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: 37.3866556, lng: -122.1111336},
+    zoom: 13
+  });
 
-    layer.setMap(map);
+
+
+  boundary.setMap(map);
+
+  var layer = new google.maps.FusionTablesLayer({
+    query: {
+      select: '\'What is your street address?\'',
+      from: TABLE_ID
+    }
+  });
+
+  console.log(layer);
+
+  layer.setMap(map);
 }

@@ -19,6 +19,10 @@
   "homepage": "https://github.com/kungminlin/Parking-Permit-Proposal#readme",
   "dependencies": {
     "@google/maps": "^0.4.6",
-    "electron": "^2.0.2"
+    "dotenv": "^6.0.0",
+    "electron": "^2.0.2",
+    "fast-csv": "^2.4.1",
+    "googleapis": "^32.0.0",
+    "jquery": "^3.3.1"
   }
 }
