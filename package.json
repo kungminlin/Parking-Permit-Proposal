@@ -1,28 +1,17 @@
 {
-  "name": "parking-permit-proposal",
-  "description": "LAHS Parking Permit Proposal System",
+  "name": "parking-permit",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "An application for the LAHS Parking Permit Proposal (2018)",
+  "main": "app.js",
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kungminlin/Parking-Permit-Proposal.git"
-  },
   "author": "Kung-Min Lin",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/kungminlin/Parking-Permit-Proposal/issues"
-  },
-  "homepage": "https://github.com/kungminlin/Parking-Permit-Proposal#readme",
   "dependencies": {
-    "@google/maps": "^0.4.6",
     "dotenv": "^6.0.0",
-    "electron": "^2.0.2",
-    "fast-csv": "^2.4.1",
-    "googleapis": "^32.0.0",
+    "electron": "^2.0.6",
     "jquery": "^3.3.1"
   }
 }
